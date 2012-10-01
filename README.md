@@ -1,3 +1,10 @@
+# Todo
+* テキスト処理系
+	* 文を1単位にそれで共起度を計測
+	* 助詞、助動詞、記号の削除もしくは必要な要素のみの抜き取り
+* アルゴリズム実装
+* ネットワーク図示
+
 # 読んだWEBページ  
 [MacにMecabとmecab-rubyをインストールして形態素解析。辞書はIPA辞書、NAIST辞書、UniDicの３種：Garbage In Garbage Out](http://g1g0.com/2012/03/1752/)  
 [RMeCab - RとLinuxと.../Macintosh 版バイナリ のインストール方法](http://rmecab.jp/wiki/index.php?RMeCab#xeec6040)  
