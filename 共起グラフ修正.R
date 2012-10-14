@@ -6,7 +6,7 @@ text_temp <- text[text$Info1 =="名詞" & text$Info2 == "一般" |text$Info1 =="
 # 抽出できた。抽出条件もひとまず。これで。
 text_freq <- tail(text_temp[order(text_temp$Freq),],n=20)
 # トップ20を抽出。tailはどうかと思うから後で変更。
-# order関数でなくrank関数の方が良いのでは？
+## order関数でなくrank関数の方が良いのでは？それなら、順番が1,2.5,2,5,4,5,6,7.5,7.5,9・・・って感じでソートされるので、x<9とか出来る。はず。にょわー☆
 text_freq[,1]
 # 結果
 # [1] "村"               "死ぬ"             "信じる"           "殴る"            
@@ -19,9 +19,41 @@ top_text_freq <- text_freq[,1]
 # spanだから文単位じゃない、後で直す。眠い。
 # ひとまず、ここ以降を重点的に修正！！
 # 更にループでもない、付け焼刃。後で直す。文字と数字を一致させてループ回す方法、前期にやったはず。
+
+
+#######################がんばる！！！！#######################
+# 以下をループ仕様に変更
+# top_text_freqは文字列ベクトル。top_text_freq[1]は"村"
+# 必要そうな情報 top_text_freqの数。
+length(top_text_freq)
+##	for 1からlength(top_text_freq)
+##		word_n <- as.data.frame(collocate("merosu.txt",node="top_text_freq[n]",span=5)[c(T,F,F,T,F)])
+##		word_nはテキスト全部とある単語の共起度一覧。
+##		for 1からlength(top_text_freq)
+##			word_meros <- word_n[word_n$Term=="top_text_freq[m]",]
+##			word_merosをrbind関数でつなげる。全部！ぐるぐる共起度抽出回し祭りｷﾀ━(ﾟ∀ﾟ)━!
+##			ループここまで
+##		word_X<-top_text_freq[n]
+##		word_meros$Term0<-word_X
+##		word_meros <- word_meros[,c(3,1,2)]
+##		グラフで描写出来るようにデータを整理。
+##		rbindでword_merosをまた結合祭り。
+##		ループおしまい。
+# word_merosu <- as.data.frame(collocate("merosu.txt",node="メロス",span=5)[c(T,F,F,T,F)])
+# メロスって単語で、走れメロス全体の単語との共起度を抽出。
+# word_meros <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス"|word_merosu$Term=="殺す"|word_merosu$Term=="王"|word_merosu$Term=="友"|word_merosu$Term=="人"|word_merosu$Term=="走る"|word_merosu$Term=="無い"|word_merosu$Term=="なる"|word_merosu$Term=="する"|word_merosu$Term=="メロス",]
+# その全部からトップ20のみのあれを抽出
+# word<-"メロス"
+# word_meros$Term0<-word
+# word_meros <- word_meros[,c(3,1,2)]
+# 共起度フォーマットに変換
+# rbind関数でデータフレームをどんどんムカデみたいにつなげる・・・ムカデ男ってCV:若本だっけ？
+
+
+
 collocate("merosu.txt",node="メロス",span=5)
 word_merosu <- as.data.frame(collocate("merosu.txt",node="メロス",span=5)[c(T,F,F,T,F)])
-word_meros <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス"|word_merosu$Term=="殺す"|word_merosu$Term=="王"|word_merosu$Term=="友"|word_merosu$Term=="人"|word_merosu$Term=="走る"|word_merosu$Term=="無い"|word_merosu$Term=="なる"|word_merosu$Term=="する",]
+word_meros <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス"|word_merosu$Term=="殺す"|word_merosu$Term=="王"|word_merosu$Term=="友"|word_merosu$Term=="人"|word_merosu$Term=="走る"|word_merosu$Term=="無い"|word_merosu$Term=="なる"|word_merosu$Term=="する"|word_merosu$Term=="メロス",]
 collocate("merosu.txt",node="する",span=5)
 word_merosu <- as.data.frame(collocate("merosu.txt",node="する",span=5)[c(T,F,F,T,F)])
 word_suru <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス"|word_merosu$Term=="殺す"|word_merosu$Term=="王"|word_merosu$Term=="友"|word_merosu$Term=="人"|word_merosu$Term=="走る"|word_merosu$Term=="無い"|word_merosu$Term=="なる",]
@@ -116,6 +148,8 @@ word_dekiru$Term0<-word
 # word<-"死ぬ"
 # word_sinu$Term0<-word
 # #は共起度 0のやつ このエラー対策も考える。
+# 二倍なら共起度必ずあるはずじゃない・・・？
+# 違う？とっても孤独だけれど、頻度の高い関数とかあったら・・・？
 kyoukiG <- rbind(word_meros[,c(3,1,2)],word_suru[,c(3,1,2)],word_naru[,c(3,1,2)],word_nai[,c(3,1,2)],word_hasiru[,c(3,1,2)],word_hito[,c(3,1,2)],word_tomo[,c(3,1,2)],word_ou[,c(3,1,2)],word_seri[,c(3,1,2)],word_iu[,c(3,1,2)],word_otoko[,c(3,1,2)],word_imouto[,c(3,1,2)],word_dekiru[,c(3,1,2)])
 kyoukiG
 # 共起グラフ用データセット作成！長かった！
