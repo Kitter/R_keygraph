@@ -27,26 +27,39 @@ top_text_freq <- text_freq[,1]
 ## 必要そうな情報 top_text_freqの数。
 length(top_text_freq)
 ##	for 1からlength(top_text_freq)までループ
-n <- 0
+word_n <- 0
+kyoukiG <- 0
 for (n in 1:length(top_text_freq)) {
 	word_n <- as.data.frame(collocate("merosu.txt",node=top_text_freq[n],span=5)[c(T,F,F,T,F)])
+	print(top_text_freq[n])
+	print(word_n)
 ##		word_n <- as.data.frame(collocate("merosu.txt",node="top_text_freq[n]",span=5)[c(T,F,F,T,F)])
 ##		# word_nはテキスト全部とある単語の共起度一覧。スパン5は変わらず。どうにかしないと。ココ。
-	m <- 0
+	word_m <- 0
+	#word_mをリセット
 	for (m in 1:length(top_text_freq)) {
 ##		for 1からlength(top_text_freq)
 		word_meros <- word_n[word_n$Term==top_text_freq[m],]
 ##			word_meros <- word_n[word_n$Term=="top_text_freq[m]",]
-		word_m <- rbind(word_meros)
+		print(word_meros)
+		word_m <- rbind(word_m,word_meros)
+		word_m
+		print(word_m)
+		##ココが共起度0の時なんか変な感じ！！！！
 ##			word_merosをrbind関数でつなげる。全部！ぐるぐる共起度抽出回し祭りｷﾀ━(ﾟ∀ﾟ)━!
 	}
 ##			ループここまで
-	word_meros$Term0<-top_text_freq[n]
-	word_meros <- word_meros[,c(3,1,2)]
+	print(word_m)
+	word_m$Term0<-top_text_freq[n]
+	#Term0を追加
+	word_m <- word_m[,c(3,1,2)]
+	#Term0 Term Spanの順番に
+	print(word_m)
 ##	# グラフで描写出来るようにデータを整理。
-	kyoukiG <- rbind(word_meros)
-##		kyoukiG <- rbindでword_merosをまた結合祭り。
+	kyoukiG <- rbind(kyoukiG,word_m)
+##		kyoukiG <- rbindでword_mをまた結合祭り。
 }
+# kyoukiGの条件=Spanが0の部分は除く関数作る。
 kyoukiG
 ##		ループおしまい。
 ##
