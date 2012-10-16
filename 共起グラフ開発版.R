@@ -40,7 +40,7 @@ for (n in 1:length(top_text_freq)) {
 		word_m <- rbind(word_meros)
 ##			word_merosをrbind関数でつなげる。全部！ぐるぐる共起度抽出回し祭りｷﾀ━(ﾟ∀ﾟ)━!
 	}
-##			ループここまで 
+##			ループここまで
 	word_meros$Term0<-top_text_freq[n]
 	word_meros <- word_meros[,c(3,1,2)]
 ##	# グラフで描写出来るようにデータを整理。
