@@ -6,7 +6,7 @@ text_temp <- text[text$Info1 =="名詞" & text$Info2 == "一般" |text$Info1 =="
 # 抽出できた。抽出条件もひとまず。これで。
 text_freq <- tail(text_temp[order(text_temp$Freq),],n=20)
 # トップ20を抽出。tailはどうかと思うから後で変更。
-## order関数でなくrank関数の方が良いのでは？それなら、順番が1,2.5,2,5,4,5,6,7.5,7.5,9・・・って感じでソートされるので、x<9とか出来る。はず。にょわー☆
+## order関数でなくrank関数の方が良いのでは？それなら、順番が1, 2.5, 2.5, 4, 5, 6, 7.5, 7.5, 9・・・って感じでソートされるので、x<9とか出来る。はず。にょわー☆
 text_freq[,1]
 # 結果
 # [1] "村"               "死ぬ"             "信じる"           "殴る"            
@@ -26,18 +26,28 @@ top_text_freq <- text_freq[,1]
 # top_text_freqは文字列ベクトル。top_text_freq[1]は"村"
 ## 必要そうな情報 top_text_freqの数。
 length(top_text_freq)
-##	for 1からlength(top_text_freq)
+##	for 1からlength(top_text_freq)までループ
+n <- 0
+for (n in 1:length(top_text_freq)) {
+	word_n <- as.data.frame(collocate("merosu.txt",node=top_text_freq[n],span=5)[c(T,F,F,T,F)])
 ##		word_n <- as.data.frame(collocate("merosu.txt",node="top_text_freq[n]",span=5)[c(T,F,F,T,F)])
-##		# word_nはテキスト全部とある単語の共起度一覧。
+##		# word_nはテキスト全部とある単語の共起度一覧。スパン5は変わらず。どうにかしないと。ココ。
+	m <- 0
+	for (m in 1:length(top_text_freq)) {
 ##		for 1からlength(top_text_freq)
+		word_meros <- word_n[word_n$Term==top_text_freq[m],]
 ##			word_meros <- word_n[word_n$Term=="top_text_freq[m]",]
+		word_m <- rbind(word_meros)
 ##			word_merosをrbind関数でつなげる。全部！ぐるぐる共起度抽出回し祭りｷﾀ━(ﾟ∀ﾟ)━!
-##			ループここまで
-##		word_X<-top_text_freq[n]
-##		word_meros$Term0<-word_X
-##		word_meros <- word_meros[,c(3,1,2)]
-##		# グラフで描写出来るようにデータを整理。
+	}
+##			ループここまで 
+	word_meros$Term0<-top_text_freq[n]
+	word_meros <- word_meros[,c(3,1,2)]
+##	# グラフで描写出来るようにデータを整理。
+	kyoukiG <- rbind(word_meros)
 ##		kyoukiG <- rbindでword_merosをまた結合祭り。
+}
+kyoukiG
 ##		ループおしまい。
 ##
 ##		これで、ここまで自動化出来たはず。
