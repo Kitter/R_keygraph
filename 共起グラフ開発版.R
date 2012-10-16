@@ -40,7 +40,9 @@ for (n in 1:length(top_text_freq)) {
 	for (m in 1:length(top_text_freq)) {
 ##		for 1からlength(top_text_freq)
 		word_meros <- word_n[word_n$Term==top_text_freq[m],]
-##			word_meros <- word_n[word_n$Term=="top_text_freq[m]",]
+##		word_meros <- word_n[word_n$Term=="top_text_freq[m]",]
+		if(length(word_meros$Span) == 0){next}
+##		ココでT,F判別。共起度あるなら下、無いなら上へってやらんと。
 		print(word_meros)
 		word_m <- rbind(word_m,word_meros)
 		word_m
