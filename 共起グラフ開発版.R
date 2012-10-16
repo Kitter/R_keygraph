@@ -42,7 +42,7 @@ for (n in 1:length(top_text_freq)) {
 		word_meros <- word_n[word_n$Term==top_text_freq[m],]
 ##		word_meros <- word_n[word_n$Term=="top_text_freq[m]",]
 		if(length(word_meros$Span) == 0){next}
-##		ココでT,F判別。共起度あるなら下、無いなら上へってやらんと。
+##		ココでT,F判別。共起度あるなら下、無いなら上へってやらんと。長さ判別で0のやつをnextに持っていく発想に2日かかった。もっと精進。
 		print(word_meros)
 		word_m <- rbind(word_m,word_meros)
 		word_m
@@ -61,7 +61,8 @@ for (n in 1:length(top_text_freq)) {
 	kyoukiG <- rbind(kyoukiG,word_m)
 ##		kyoukiG <- rbindでword_mをまた結合祭り。
 }
-# kyoukiGの条件=Spanが0の部分は除く関数作る。
+kyoukiG <- kyoukiG[kyoukiG$Span!=0,]
+# kyoukiGの条件=Spanが0の部分は除く関数作る。これ、マトリクスに出来ないかな？
 kyoukiG
 ##		ループおしまい。
 ##
@@ -69,129 +70,6 @@ kyoukiG
 ##		kyoukiG <- kyoukiGを半分にする必要あり・・・？あれ、メロスはメロスもあってメロスとセリヌンティウスとセリヌンティウスとメロスもあるんだから・・・？でも共起度が往復するだけだから大丈夫？うーん、igraphでテストデータ作ってみないことにはわからないかも。ダメだったら修正どうにか書ける必要がある。メロスとメロスなんかのやつは条件設定で抜けるはず？
 ##		# 共起グラフ用データセット作成！長かった！
 ##		# グラフ作成 
-##		library(igraph)
-##		graphdata<-graph.data.frame(kyoukiG, directed = F)
-##		plot(graphdata, vertex.label=V(graphdata)$name)
-##		kyoukiG2 <- kyoukiG[kyoukiG$Span>1,]
-##		kyoukiG2
-##		graphdata2<-graph.data.frame(kyoukiG2, directed = F)
-##		plot(graphdata2, vertex.label=V(graphdata2)$name)
-
-# word_merosu <- as.data.frame(collocate("merosu.txt",node="メロス",span=5)[c(T,F,F,T,F)])
-# メロスって単語で、走れメロス全体の単語との共起度を抽出。
-# word_meros <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス"|word_merosu$Term=="殺す"|word_merosu$Term=="王"|word_merosu$Term=="友"|word_merosu$Term=="人"|word_merosu$Term=="走る"|word_merosu$Term=="無い"|word_merosu$Term=="なる"|word_merosu$Term=="する"|word_merosu$Term=="メロス",]
-# その全部からトップ20のみのあれを抽出
-# word<-"メロス"
-# word_meros$Term0<-word
-# word_meros <- word_meros[,c(3,1,2)]
-# 共起度フォーマットに変換
-# rbind関数でデータフレームをどんどんムカデみたいにつなげる・・・ムカデ男ってCV:若本だっけ？
-
-
-
-collocate("merosu.txt",node="メロス",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="メロス",span=5)[c(T,F,F,T,F)])
-word_meros <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス"|word_merosu$Term=="殺す"|word_merosu$Term=="王"|word_merosu$Term=="友"|word_merosu$Term=="人"|word_merosu$Term=="走る"|word_merosu$Term=="無い"|word_merosu$Term=="なる"|word_merosu$Term=="する"|word_merosu$Term=="メロス",]
-collocate("merosu.txt",node="する",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="する",span=5)[c(T,F,F,T,F)])
-word_suru <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス"|word_merosu$Term=="殺す"|word_merosu$Term=="王"|word_merosu$Term=="友"|word_merosu$Term=="人"|word_merosu$Term=="走る"|word_merosu$Term=="無い"|word_merosu$Term=="なる",]
-collocate("merosu.txt",node="なる",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="なる",span=5)[c(T,F,F,T,F)])
-word_naru <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス"|word_merosu$Term=="殺す"|word_merosu$Term=="王"|word_merosu$Term=="友"|word_merosu$Term=="人"|word_merosu$Term=="走る"|word_merosu$Term=="無い",]
-collocate("merosu.txt",node="無い",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="無い",span=5)[c(T,F,F,T,F)])
-word_nai <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス"|word_merosu$Term=="殺す"|word_merosu$Term=="王"|word_merosu$Term=="友"|word_merosu$Term=="人"|word_merosu$Term=="走る",]
-collocate("merosu.txt",node="走る",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="走る",span=5)[c(T,F,F,T,F)])
-word_hasiru <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス"|word_merosu$Term=="殺す"|word_merosu$Term=="王"|word_merosu$Term=="友"|word_merosu$Term=="人",]
-collocate("merosu.txt",node="人",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="人",span=5)[c(T,F,F,T,F)])
-word_hito <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス"|word_merosu$Term=="殺す"|word_merosu$Term=="王"|word_merosu$Term=="友",]
-collocate("merosu.txt",node="友",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="友",span=5)[c(T,F,F,T,F)])
-word_tomo <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス"|word_merosu$Term=="殺す"|word_merosu$Term=="王",]
-collocate("merosu.txt",node="王",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="王",span=5)[c(T,F,F,T,F)])
-word_ou <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス"|word_merosu$Term=="殺す",]
-collocate("merosu.txt",node="殺す",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="殺す",span=5)[c(T,F,F,T,F)])
-word_korosu <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う"|word_merosu$Term=="セリヌンティウス",]
-collocate("merosu.txt",node="セリヌンティウス",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="セリヌンティウス",span=5)[c(T,F,F,T,F)])
-word_seri <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男"|word_merosu$Term=="言う",]
-collocate("merosu.txt",node="言う",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="言う",span=5)[c(T,F,F,T,F)])
-word_iu <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹"|word_merosu$Term=="男",]
-collocate("merosu.txt",node="男",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="男",span=5)[c(T,F,F,T,F)])
-word_otoko <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る"|word_merosu$Term=="妹",]
-collocate("merosu.txt",node="妹",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="妹",span=5)[c(T,F,F,T,F)])
-word_imouto <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい"|word_merosu$Term=="出来る",]
-collocate("merosu.txt",node="出来る",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="出来る",span=5)[c(T,F,F,T,F)])
-word_dekiru <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市"|word_merosu$Term=="いい",]
-collocate("merosu.txt",node="いい",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="いい",span=5)[c(T,F,F,T,F)])
-word_ii <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る"|word_merosu$Term=="市",]
-collocate("merosu.txt",node="市",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="市",span=5)[c(T,F,F,T,F)])
-word_iti <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる"|word_merosu$Term=="殴る",]
-collocate("merosu.txt",node="殴る",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="殴る",span=5)[c(T,F,F,T,F)])
-word_naguru <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ"|word_merosu$Term=="信じる",]
-collocate("merosu.txt",node="信じる",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="信じる",span=5)[c(T,F,F,T,F)])
-word_sinnjiru <- word_merosu[word_merosu$Term=="村"|word_merosu$Term=="死ぬ",]
-collocate("merosu.txt",node="死ぬ",span=5)
-word_merosu <- as.data.frame(collocate("merosu.txt",node="死ぬ",span=5)[c(T,F,F,T,F)])
-word_sinu <- word_merosu[word_merosu$Term=="村",]
-# 共起度完了
-word<-"メロス"
-word_meros$Term0<-word
-word<-"する"
-word_suru$Term0<-word
-word<-"なる"
-word_naru$Term0<-word
-word<-"無い"
-word_nai$Term0<-word
-word<-"走る"
-word_hasiru$Term0<-word
-word<-"人"
-word_hito$Term0<-word
-word<-"友"
-word_tomo$Term0<-word
-word<-"王"
-word_ou$Term0<-word
-# word<-"殺す"
-# word_korosu$Term0<-word
-word<-"セリヌンティウス"
-word_seri$Term0<-word
-word<-"言う"
-word_iu$Term0<-word
-word<-"男"
-word_otoko$Term0<-word
-word<-"妹"
-word_imouto$Term0<-word
-word<-"出来る"
-word_dekiru$Term0<-word
-# word<-"いい"
-# word_ii$Term0<-word
-# word<-"市"
-# word_iti$Term0<-word
-# word<-"殴る"
-# word_naguru$Term0<-word
-# word<-"信じる"
-# word_sinnjiru$Term0<-word
-# word<-"死ぬ"
-# word_sinu$Term0<-word
-# #は共起度 0のやつ このエラー対策も考える。
-# 二倍なら共起度必ずあるはずじゃない・・・？
-# 違う？とっても孤独だけれど、頻度の高い関数とかあったら・・・？
-kyoukiG <- rbind(word_meros[,c(3,1,2)],word_suru[,c(3,1,2)],word_naru[,c(3,1,2)],word_nai[,c(3,1,2)],word_hasiru[,c(3,1,2)],word_hito[,c(3,1,2)],word_tomo[,c(3,1,2)],word_ou[,c(3,1,2)],word_seri[,c(3,1,2)],word_iu[,c(3,1,2)],word_otoko[,c(3,1,2)],word_imouto[,c(3,1,2)],word_dekiru[,c(3,1,2)])
-kyoukiG
-# 共起グラフ用データセット作成！長かった！
-# グラフ作成 
 library(igraph)
 graphdata<-graph.data.frame(kyoukiG, directed = F)
 plot(graphdata, vertex.label=V(graphdata)$name)
