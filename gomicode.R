@@ -1,1 +1,0 @@
-library(RMeCab)text <-  RMeCabFreq("merosu.txt")# 読み込み、解析head(text)text[text$Freq >= 10 & (text$Info1 =="名詞" & text$Info2 == "一般" |text$Info1 =="動詞" & text$Info2 == "自立" |text$Info1 =="形容詞" & text$Info2 == "自立"),]###text[text$Info1 =="名詞" & text$Info2 == "一般" |text$Info1 =="動詞" & text$Info2 == "自立" |text$Info1 =="形容詞" & text$Info2 == "自立",]
