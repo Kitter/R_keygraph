@@ -17,12 +17,7 @@ text_freq[,1]
 top_text_freq <- text_freq[,1]
 # 共起度を計測。修正多し。
 # spanだから文単位じゃない、後で直す。眠い。
-# ひとまず、ここ以降を重点的に修正！！
-# 更にループでもない、付け焼刃。後で直す。文字と数字を一致させてループ回す方法、前期にやったはず。
 
-
-#######################がんばる！！！！#######################
-# 以下をループ仕様に変更
 # top_text_freqは文字列ベクトル。top_text_freq[1]は"村"
 ## 必要そうな情報 top_text_freqの数。
 length(top_text_freq)
@@ -32,39 +27,38 @@ kyoukiG <- 0
 for (n in 1:length(top_text_freq)) {
 	word_n <- as.data.frame(collocate("merosu.txt",node=top_text_freq[n],span=5)[c(T,F,F,T,F)])
 	print(top_text_freq[n])
-	print(word_n)
 ##		word_n <- as.data.frame(collocate("merosu.txt",node="top_text_freq[n]",span=5)[c(T,F,F,T,F)])
 ##		# word_nはテキスト全部とある単語の共起度一覧。スパン5は変わらず。どうにかしないと。ココ。
 	word_m <- 0
 	#word_mをリセット
 	for (m in 1:length(top_text_freq)) {
 ##		for 1からlength(top_text_freq)
+		print(length(top_text_freq)-n+1-m+1)
+		if(length(top_text_freq)-n+1-m+1== 0){break}
 		word_meros <- word_n[word_n$Term==top_text_freq[m],]
 ##		word_meros <- word_n[word_n$Term=="top_text_freq[m]",]
+		if(top_text_freq[n] == top_text_freq[m]){next}
 		if(length(word_meros$Span) == 0){next}
-##		ココでT,F判別。共起度あるなら下、無いなら上へってやらんと。長さ判別で0のやつをnextに持っていく発想に2日かかった。もっと精進。
-		print(word_meros)
+##		ココでT,F判別。nとmが同じなら次のループへ。また、共起度あるなら下、無いなら上へ。長さ判別で0のやつをnextに持っていく発想に2日かかった。もっと精進。
 		word_m <- rbind(word_m,word_meros)
-		word_m
-		print(word_m)
-		##ココが共起度0の時なんか変な感じ！！！！
 ##			word_merosをrbind関数でつなげる。全部！ぐるぐる共起度抽出回し祭りｷﾀ━(ﾟ∀ﾟ)━!
 	}
-##			ループここまで
-	print(word_m)
+##			ループ1ここまで
+	if(length(word_m$Term) == 0){next}
 	word_m$Term0<-top_text_freq[n]
 	#Term0を追加
 	word_m <- word_m[,c(3,1,2)]
 	#Term0 Term Spanの順番に
-	print(word_m)
+#	print(word_m)
 ##	# グラフで描写出来るようにデータを整理。
 	kyoukiG <- rbind(kyoukiG,word_m)
 ##		kyoukiG <- rbindでword_mをまた結合祭り。
 }
+# ループ2ここまで
 kyoukiG <- kyoukiG[kyoukiG$Span!=0,]
-# kyoukiGの条件=Spanが0の部分は除く関数作る。これ、マトリクスに出来ないかな？
+# kyoukiGの条件=Spanが0の部分は除く。
 kyoukiG
-##		ループおしまい。
+# これ、マトリクスに出来ないかな？
 ##
 ##		これで、ここまで自動化出来たはず。
 ##		kyoukiG <- kyoukiGを半分にする必要あり・・・？あれ、メロスはメロスもあってメロスとセリヌンティウスとセリヌンティウスとメロスもあるんだから・・・？でも共起度が往復するだけだから大丈夫？うーん、igraphでテストデータ作ってみないことにはわからないかも。ダメだったら修正どうにか書ける必要がある。メロスとメロスなんかのやつは条件設定で抜けるはず？
