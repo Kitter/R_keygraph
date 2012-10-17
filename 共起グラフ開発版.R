@@ -33,8 +33,6 @@ for (n in 1:length(top_text_freq)) {
 	#word_mをリセット
 	for (m in 1:length(top_text_freq)) {
 ##		for 1からlength(top_text_freq)
-		print(length(top_text_freq)-n+1-m+1)
-		if(length(top_text_freq)-n+1-m+1== 0){break}
 		word_meros <- word_n[word_n$Term==top_text_freq[m],]
 ##		word_meros <- word_n[word_n$Term=="top_text_freq[m]",]
 		if(top_text_freq[n] == top_text_freq[m]){next}
@@ -44,7 +42,6 @@ for (n in 1:length(top_text_freq)) {
 ##			word_merosをrbind関数でつなげる。全部！ぐるぐる共起度抽出回し祭りｷﾀ━(ﾟ∀ﾟ)━!
 	}
 ##			ループ1ここまで
-	if(length(word_m$Term) == 0){next}
 	word_m$Term0<-top_text_freq[n]
 	#Term0を追加
 	word_m <- word_m[,c(3,1,2)]
@@ -55,13 +52,18 @@ for (n in 1:length(top_text_freq)) {
 ##		kyoukiG <- rbindでword_mをまた結合祭り。
 }
 # ループ2ここまで
-kyoukiG <- kyoukiG[kyoukiG$Span!=0,]
+kyoukiG
+kyoukiGX <- 0
+for (n in 1:length(top_text_freq)) { 
+	print(top_text_freq[n])
+	kyoukiGX <- rbind(kyoukiG[kyoukiG$Term0 == top_text_freq[n],],kyoukiGX)
+	kyoukiG <- kyoukiG[kyoukiG$Term != top_text_freq[n] | kyoukiG$Term0 == top_text_freq[n],]
+}
+kyoukiG <- kyoukiGX[kyoukiGX$Span!=0,]
 # kyoukiGの条件=Spanが0の部分は除く。
 kyoukiG
-# これ、マトリクスに出来ないかな？
-##
-##		これで、ここまで自動化出来たはず。
-##		kyoukiG <- kyoukiGを半分にする必要あり・・・？あれ、メロスはメロスもあってメロスとセリヌンティウスとセリヌンティウスとメロスもあるんだから・・・？でも共起度が往復するだけだから大丈夫？うーん、igraphでテストデータ作ってみないことにはわからないかも。ダメだったら修正どうにか書ける必要がある。メロスとメロスなんかのやつは条件設定で抜けるはず？
+#### これ、マトリクスに出来ないかな？
+##		kyoukiG <- kyoukiGを半分にする必要あり・・・？あれ、メロスはメロスもあってメロスとセリヌンティウスとセリヌンティウスとメロスもあるんだから・・・？でも共起度が往復するだけだから大丈夫？うーん、igraphでテストデータ作ってみないことにはわからないかも。ダメだったら修正どうにか書ける必要がある。メロスとメロスなんかのやつは条件設定で抜けるはず？だめだった。重複は抜く。
 ##		# 共起グラフ用データセット作成！長かった！
 ##		# グラフ作成 
 library(igraph)
