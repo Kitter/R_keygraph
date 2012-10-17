@@ -6,7 +6,7 @@ text <-  RMeCabFreq(textdata)
 head(text)
 text_temp <- text[text$Info1 =="名詞" & text$Info2 == "一般" |text$Info1 =="動詞" & text$Info2 == "自立" |text$Info1 =="形容詞" & text$Info2 == "自立",]
 # 抽出できた。抽出条件もひとまず。これで。
-text_temp <- text_temp[text_temp$Term!="する"&text_temp$Term!="いる"&text_temp$Term!="なる"&text_temp$Term !="ない"&text_temp$Term!="言う"&text_temp$Term!="ある",]
+text_temp <- text_temp[text_temp$Term!="する"&text_temp$Term!="いる"&text_temp$Term!="なる"&text_temp$Term !="ない"&text_temp$Term!="言う"&text_temp$Term!="ある"&text_temp$Term!="いい",]
 # 抽出ブラックリスト。するとか、なるとか。いるとか。ひとまず。
 text_freq <- tail(text_temp[order(text_temp$Freq),],n=20)
 # トップ20を抽出。tailはどうかと思うから後で変更。
@@ -31,11 +31,13 @@ for (n in 1:length(top_text_freq)) {
 #		top_text_freq[m]を抽出word_meros関数を別の名前に
 		if(top_text_freq[n] == top_text_freq[m]){next}
 		if(length(word_meros$Span) == 0){next}
-#		ココでT,F判別。nとmが同じなら次のループへ。また、共起度あるなら下、無いなら上へ。長さ判別で0のやつをnextに持っていく。
+#		ココでT,F判別。nとmが同じなら次のループへ。また、共起度あるなら下、次のループへ。長さ判別で0のやつをnextに持っていく。
 		word_m <- rbind(word_m,word_meros)
 #			word_merosをrbind関数でつなげる。全部！ぐるぐる共起度抽出回し祭りｷﾀ━(ﾟ∀ﾟ)━!
 	}
-#			ループ1ここまで
+#	ループ2ここまで
+	if(length(word_m) == 1){next}
+#	word_mに共起度が存在しない場合、次のループへ。
 	word_m$Term0<-top_text_freq[n]
 	#Term0を追加
 	word_m <- word_m[,c(3,1,2)]
@@ -44,7 +46,7 @@ for (n in 1:length(top_text_freq)) {
 	kyoukiG <- rbind(kyoukiG,word_m)
 #	kyoukiG <- rbindでword_mをまた結合祭り。
 }
-# ループ2ここまで
+# ループ1ここまで
 kyoukiG
 kyoukiGX <- 0
 for (n in 1:length(top_text_freq)) { 
