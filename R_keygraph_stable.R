@@ -1,96 +1,35 @@
-####################################一番開発が早いバージョン。後に関数はkai版に切り替えたい。安定したらstableを書き換える事。##############################################
-
 library(RMeCab)
 library(igraph)
-library(rjson)
 
-twitter2txt<-function(textdata="twitter.txt",outputtxt="output.txt"){
+####################################区切り##############################################
+#入力:"twitter.txt" 出力:無し(textdata)
 library(rjson)
 # Twitter読み込み
+# cat *.txt > twitter.txt
+textdata <- "twitter.txt"
 tweetdata<-fromJSON(paste("[",paste(readLines(textdata), collapse=","),"]"))
 #fromJSOM形式で読めるように加工
 output<-sapply(tweetdata, function(x){x$text})
 #行列に
-
-# RTは削除？
-write.table(output,outputtxt,append=F, quote=F, col.names=F,row.names=F)
+write.table(output,"output.txt",append=F, quote=F, col.names=F,row.names=F)
 #書き出し
-}
 
-rateing_g<-function(ga,gb){
-# グラフ評価用。ハフマン距離と相関係数.
-# ga<gbデータ量的に？
-g01 <-tougou(ga,gb)
-g02 <-tougou(gb,ga)
-g01 <-graph.data.frame(g01, directed = F)
-g02 <-graph.data.frame(g02, directed = F)
-g01 <-get.adjacency(g01,attr="Span")
-g02 <-get.adjacency(g02,attr="Span")
-hahu <-sum(abs(g01-g02))
-sou<-cor(
-g01[-seq(1,length(g01),by = nrow(g01)+1)],
-g02[-seq(1,length(g02),by = nrow(g02)+1)])
-x<-list(hahu,sou)
-name<-c("ハフマン距離","相関係数")
-names(x)<-name
-return(x)
-}
+####################################区切り##############################################
+#入力:"output.txt"M1-M5 出力:
+textdata <- "output.txt"
 
-keygraphplot<-function(keygraph,Key_w_G_hub,Key_w_I){
-g <-graph.data.frame(keygraph, directed = F)
-# E(g)$color <- "black"
-E(g)[Span == 3]$width <- 2
-# 線の幅
-E(g)$lty <- 1
-# 実線
-E(g)[Span == 3]$lty <- 3
-# E(g)[Span == 3]$color <- "red"
-# 点線
-V(g)$size <- 5
-V(g)$label.cex <- 0.7
-V(g)$label.color <- "black"
-V(g)$label.dist <- 0.5
-V(g)$label.degree <- pi/2
-V(g)$color <- "skyblue"
-for(n in 1:length(Key_w_G_hub$word)){
-	V(g)[name == Key_w_G_hub$word[n]]$color <- "grey"
-}
-for(n in 1:length(Key_w_I$word)){
-	V(g)[name == Key_w_I$word[n]]$color <- "red"
-}
-# 色
-plot(g,layout=layout.auto ,vertex.label=V(g)$name)
-}
-
-tougou<-function(yuusen,haijo){
-# 行列Aと行列Bの統合。片方を0にし、もう片方との重複を削除
-
-haijo$Span <- 0
-
-for (n in 1:length(yuusen$Span)) { 
-	haijo <- haijo[haijo$Term0 != yuusen[[1]][n]|haijo$Term != yuusen[[2]][n],]
-	haijo <- haijo[haijo$Term != yuusen[[1]][n]|haijo$Term0 != yuusen[[2]][n],]
-}
-
-tougou <- merge(haijo,yuusen,all=T)
-return(tougou)
-}
-
-
-keygraph<-function(textdata="output.txt",M1=20,M2=20,M3=20,M4=20,M5=10) {
-
-#textdata <- "output.txt"
 # テキストデータ。ルート指定しないなら、Rのパス上に置く必要ある。文字コードUTF-8の改行コードLF。  
-#M1 <- 20
+M1 <- 20
 # 上位M1以内の単語
-#M2 <- 20
+M2 <- 20
 # 共起度の実線
-#M3 <- 20
+M3 <- 20
 # 橋の数
-#M4 <- 20
+M4 <- 20
 # キーアイテム集合
-#M5 <- 5
+M5 <- 5
 # キーアイテム
+####################################区切り##############################################
 
 # データ洗浄
 text <-  RMeCabFreq(textdata)
@@ -165,29 +104,6 @@ text_temp <- text_temp[
 	&text_temp$Term!="西"
 	&text_temp$Term!="棟"
 	&text_temp$Term!="都"
-	&text_temp$Term!="ます"
-	&text_temp$Term!="まま"
-	&text_temp$Term!="そう"
-	&text_temp$Term!="でる"
-	&text_temp$Term!="みる"
-	&text_temp$Term!="せる"
-	&text_temp$Term!="たい"
-	&text_temp$Term!="わ"
-	&text_temp$Term!="たい"
-	&text_temp$Term!="ね"
-	&text_temp$Term!="ちゃん"
-	&text_temp$Term!="さん"
-	&text_temp$Term!="まま"
-	&text_temp$Term!="とく"
-	&text_temp$Term!="すぎる"
-	&text_temp$Term!="店"
-	&text_temp$Term!="子"
-	&text_temp$Term!="方"
-	&text_temp$Term!="先"
-	&text_temp$Term!="中"
-	&text_temp$Term!="後"
-	&text_temp$Term!="い"
-
 
 ,]
 # 抽出ブラックリスト。するとか、なるとか。いるとか。ひとまず。
@@ -441,32 +357,15 @@ Key_w_G # キーアイテム集合
 Key_w_G_hub # ハブ 灰色
 Key_w_I # キーアイテム 赤色
 
-kyoukiGX_RAW<-kyoukiGX
-kyoukiGW_RAW<-kyoukiGW
-
 kyoukiGX$Span <- 5
 kyoukiGW$Span <- 3
-# グラフプロットのために共起度統一
-
+# 橋優先
 for (n in 1:length(kyoukiGW$Span)) { 
 	kyoukiGX <- kyoukiGX[kyoukiGX$Term0 != kyoukiGW[[1]][n]|kyoukiGX$Term != kyoukiGW[[2]][n],]
 	kyoukiGX <- kyoukiGX[kyoukiGX$Term != kyoukiGW[[1]][n]|kyoukiGX$Term0 != kyoukiGW[[2]][n],]
 }
-# 橋優先
-
-for (n in 1:length(kyoukiGW_RAW$Span)) { 
-	kyoukiGX_RAW <- kyoukiGX_RAW[kyoukiGX_RAW$Term0 != kyoukiGW_RAW[[1]][n]|kyoukiGX_RAW$Term != kyoukiGW_RAW[[2]][n],]
-	kyoukiGX_RAW <- kyoukiGX_RAW[kyoukiGX_RAW$Term != kyoukiGW_RAW[[1]][n]|kyoukiGX_RAW$Term0 != kyoukiGW_RAW[[2]][n],]
-}
-# 橋優先
-
 keygraph <- merge(kyoukiGX,kyoukiGW,all=T)
-keygraph_RAW <- merge(kyoukiGX_RAW,kyoukiGW_RAW,all=T)
 
-
-
-
-# ここからグラフプロット
 g <-graph.data.frame(keygraph, directed = F)
 # E(g)$color <- "black"
 E(g)[Span == 3]$width <- 2
@@ -490,6 +389,3 @@ for(n in 1:length(Key_w_I$word)){
 }
 # 色
 plot(g,layout=layout.auto ,vertex.label=V(g)$name)
-
-return(list(keygraph,kyoukiGX,kyoukiGW,Key_w_G,Key_w_G_hub,Key_w_I,keygraph_RAW))
-}
