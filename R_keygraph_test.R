@@ -1,4 +1,4 @@
-####################################一番開発が早いバージョン。後に関数はkai版に切り替えたい。安定したらstableを書き換える事。##############################################
+####################################研究用KeyGraph。いろいろ改造してるかも・・・。解析の関数とかも追加してる。##############################################
 
 library(RMeCab)
 library(igraph)
@@ -17,9 +17,8 @@ write.table(output,outputtxt,append=F, quote=F, col.names=F,row.names=F)
 #書き出し
 }
 
-rateing_g<-function(ga,gb){
+rating_g<-function(ga,gb){
 # グラフ評価用。ハフマン距離と相関係数.
-# ga<gbデータ量的に？
 g01 <-tougou(ga,gb)
 g02 <-tougou(gb,ga)
 g01 <-graph.data.frame(g01, directed = F)
@@ -37,6 +36,7 @@ return(x)
 }
 
 keygraphplot<-function(keygraph,Key_w_G_hub,Key_w_I){
+# グラフプロット関数
 g <-graph.data.frame(keygraph, directed = F)
 # E(g)$color <- "black"
 E(g)[Span == 3]$width <- 2
@@ -77,20 +77,20 @@ return(tougou)
 }
 
 
-keygraph<-function(textdata="output.txt",M1=20,M2=20,M3=20,M4=20,M5=10) {
+keygraph<-function(textdata="output.txt",M1=20,M2=20,M3=10,M4=10,M5=5) {
 
-#textdata <- "output.txt"
-# テキストデータ。ルート指定しないなら、Rのパス上に置く必要ある。文字コードUTF-8の改行コードLF。  
-#M1 <- 20
-# 上位M1以内の単語
-#M2 <- 20
-# 共起度の実線
-#M3 <- 20
-# 橋の数
-#M4 <- 20
-# キーアイテム集合
-#M5 <- 5
-# キーアイテム
+# textdata <- "output.txt"
+# # テキストデータ。ルート指定しないなら、Rのパス上に置く必要ある。文字コードUTF-8の改行コードLF。  
+# M1 <- 20
+# # 上位M1以内の単語
+# M2 <- 20
+# # 共起度の実線
+# M3 <- 20
+# # 橋の数
+# M4 <- 20
+# # キーアイテム集合
+# M5 <- 5
+# # キーアイテム
 
 # データ洗浄
 text <-  RMeCabFreq(textdata)
@@ -187,12 +187,23 @@ text_temp <- text_temp[
 	&text_temp$Term!="中"
 	&text_temp$Term!="後"
 	&text_temp$Term!="い"
+	&text_temp$Term!="ち"
+	&text_temp$Term!="ど"
+	&text_temp$Term!="あや"
+	&text_temp$Term!="実"
+	&text_temp$Term!="wwwwwwwwwwwwwwwwwwwwwwwww"
+	&text_temp$Term!="anime"
+	&text_temp$Term!="（株）"
+	&text_temp$Term!="所"
+	&text_temp$Term!="部"
+	&text_temp$Term!="株"
+	&text_temp$Term!="か"
+	&text_temp$Term!="年"
+	&text_temp$Term!="姿"
 
 
 ,]
 # 抽出ブラックリスト。するとか、なるとか。いるとか。ひとまず。
-
-text_temp
 
 # 共起グラフの作成
 text_freq <- subset(text_temp,text_temp$Freq>=tail(sort(text_temp$Freq),n=M1)[1])
@@ -202,6 +213,7 @@ text_w <- unique(text_temp[,1])
 # 橋の形成で使用。uniqueは重複する単語が出るため。寒いでも形容詞と名詞でふたつでる。等。
 text_freq[,1]
 top_text_freq <- text_freq[,1]
+top_freq <- text_freq[,4]
 # top_text_freqは文字列ベクトル。top_text_freq[1]は文字。
 # for 1からlength(top_text_freq)までループ1
 word_n <- 0
@@ -211,6 +223,9 @@ for (n in 1:length(top_text_freq)) {
 	# print(top_text_freq[n])
 	# たとえばだけど、spanを1から「。」がBefore Afterで2個出てくるまでループさせるとか・・・。
 	# word_nはテキスト全部とある単語の共起度一覧。スパン5は変わらず。どうにかしないと。ココ。
+	# # Jaccard 係数= AandB/AorBにするには以下のコメントを外す。もう一つ、橋のとこにもあるので外すときは、そちらも。
+	# word_n$Span<-word_n$Span/(word_n$Span + top_freq[n])
+	# 導入すべきかせざるべきか。なんかKey(w)のときおかしくなる。
 	word_m <- 0
 	# word_mをリセット
 	for (m in 1:length(top_text_freq)) {
@@ -238,7 +253,7 @@ for (n in 1:length(top_text_freq)) {
 
 kyoukiGX <- 0
 top_text_freq
-union(kyoukiG$Term0,kyoukiG$Term)
+# union(kyoukiG$Term0,kyoukiG$Term)
 # こっちの方がいい？外部関数化するときに考えておく。
 for (n in 1:length(top_text_freq)) { 
 	kyoukiGX <- rbind(kyoukiG[kyoukiG$Term0 == top_text_freq[n],],kyoukiGX)
@@ -257,20 +272,20 @@ kyoukiG <- subset(kyoukiG,kyoukiG$Span>=tail(sort(kyoukiG$Span),n=M2)[1])
 kyoukiG
 
 
-#graphdata_K<-graph.data.frame(kyoukiG, directed = F)
-# E(g)$color <- "black"
-#E(graphdata_K)$width <- 2
+graphdata_K<-graph.data.frame(kyoukiG, directed = F)
+
+E(graphdata_K)$width <- 2
 # 線の幅
-#E(graphdata_K)$lty <- 1
+E(graphdata_K)$lty <- 1
 # 実線
-#V(graphdata_K)$size <- 5
-#V(graphdata_K)$label.cex <- 0.7
-#V(graphdata_K)$label.color <- "black"
-#V(graphdata_K)$label.dist <- 0.5
-#V(graphdata_K)$label.degree <- pi/2
-#V(graphdata_K)$color <- "skyblue"
-#plot(graphdata_K, vertex.label=V(graphdata_K)$name)
-## 共起グラフをプロットしてみる。
+V(graphdata_K)$size <- 5
+V(graphdata_K)$label.cex <- 0.7
+V(graphdata_K)$label.color <- "black"
+V(graphdata_K)$label.dist <- 0.5
+V(graphdata_K)$label.degree <- pi/2
+V(graphdata_K)$color <- "skyblue"
+plot(graphdata_K, vertex.label=V(graphdata_K)$name)
+# 共起グラフをプロットしてみる。
 
 
 
@@ -331,6 +346,10 @@ kyoukiGW <- 0
 for (n in 1:length(island_g)) {
 	word_n <- as.data.frame(collocate(textdata,node=island_g[n],span=5)[c(T,F,F,T,F)])
 	# word_nはテキスト全部とある単語(島)の共起度一覧。スパン5は変わらず。どうにかしないと。ココ。
+	# これは普通の共起度
+	# Jaccard 係数= AandB/AorBにするには以下のコメントを外す。未完成。island_gでの共起度がすでにJaccard 係数になってるため。島での共起度をどこからか持っていく。
+	# word_n$Span<-word_n$Span/(word_n$Span + top_freq[n])
+	# 導入すべきかせざるべきか。
 	word_m <- 0
 	# word_mをリセット
 	for (m in 1:length(text_w)) {
@@ -390,6 +409,7 @@ kyoukiGW
 
 # Key(w)作り。
 # 橋を介して w と結ばれる全ての島 g との共起度の和を Key(w) とする。
+# Jaccard 係数を導入した場合、0から100の確率にはならないけど、どうだろう。
 item_w <- union(kyoukiGW$Term0,kyoukiGW$Term)
 item_w
 # これとすべての島island_gとの共起度を測定
@@ -435,8 +455,8 @@ Key_w_I <- subset(Key_w,Key_w$pro>=tail(sort(Key_w$pro),n=M5)[1])
 
 
 # プロット
-kyoukiGX # 島 太い
-kyoukiGW # 橋 細い
+KG_sima <-kyoukiGX # 島 太い
+KG_hashi <-kyoukiGW # 橋 細い
 Key_w_G # キーアイテム集合
 Key_w_G_hub # ハブ 灰色
 Key_w_I # キーアイテム 赤色
@@ -469,6 +489,7 @@ keygraph_RAW <- merge(kyoukiGX_RAW,kyoukiGW_RAW,all=T)
 # ここからグラフプロット
 g <-graph.data.frame(keygraph, directed = F)
 # E(g)$color <- "black"
+E(g)[Span == 5]$width <- 3
 E(g)[Span == 3]$width <- 2
 # 線の幅
 E(g)$lty <- 1
@@ -491,5 +512,5 @@ for(n in 1:length(Key_w_I$word)){
 # 色
 plot(g,layout=layout.auto ,vertex.label=V(g)$name)
 
-return(list(keygraph,kyoukiGX,kyoukiGW,Key_w_G,Key_w_G_hub,Key_w_I,keygraph_RAW))
+return(list(keygraph,KG_sima,KG_hashi,Key_w_G,Key_w_G_hub,Key_w_I,keygraph_RAW,text_freq))
 }

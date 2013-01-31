@@ -1,18 +1,6 @@
+####################################KeyGraphのアルゴリズム####################################
 library(RMeCab)
 library(igraph)
-
-####################################区切り##############################################
-#入力:"twitter.txt" 出力:無し(textdata)
-library(rjson)
-# Twitter読み込み
-# cat *.txt > twitter.txt
-textdata <- "twitter.txt"
-tweetdata<-fromJSON(paste("[",paste(readLines(textdata), collapse=","),"]"))
-#fromJSOM形式で読めるように加工
-output<-sapply(tweetdata, function(x){x$text})
-#行列に
-write.table(output,"output.txt",append=F, quote=F, col.names=F,row.names=F)
-#書き出し
 
 ####################################区切り##############################################
 #入力:"output.txt"M1-M5 出力:
