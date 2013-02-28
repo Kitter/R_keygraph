@@ -213,6 +213,7 @@ keygraph<-function(textdata="output.txt",M1=20,M2=20,M3=10,M4=10,M5=5) {
 # # キーアイテム集合
 # M5 <- 5
 # # キーアイテム
+# KeyGraphのアルゴリズム、テキストマイニングにとっかしてるの修正したほうがいいのでは。例えば地震や共起度のある行列だったら言葉でなくても大丈夫。もしやるならテキストデータを毎回解析用に変換する。
 
 # データ洗浄
 text <-  RMeCabFreq(textdata)
@@ -367,7 +368,7 @@ for (n in 1:length(top_text_freq)) {
 	# word_nはテキスト全部とある単語の共起度一覧。スパン5は変わらず。どうにかしないと。ココ。
 	# # Jaccard 係数= AandB/AorBにするには以下のコメントを外す。もう一つ、橋のとこにもあるので外すときは、そちらも。
 	# word_n$Span<-word_n$Span/(word_n$Span + top_freq[n])
-	# 導入すべきかせざるべきか。なんかKey(w)のときおかしくなる。
+	# 導入すべきかせざるべきか。なんかKey(w)のときおかしくなる。この話、どこにも書いてなくて困る
 	word_m <- 0
 	# word_mをリセット
 	for (m in 1:length(top_text_freq)) {
@@ -551,7 +552,8 @@ kyoukiGW
 
 # Key(w)作り。
 # 橋を介して w と結ばれる全ての島 g との共起度の和を Key(w) とする。
-# Jaccard 係数を導入した場合、0から100の確率にはならないけど、どうだろう。
+# 1をオーバーしたとき、強制的に1にしてもいいみたい
+# Jaccard 係数を導入した場合、0から100の確率にはならないけど、どうだろう。その論文ってあるの？
 item_w <- union(kyoukiGW$Term0,kyoukiGW$Term)
 item_w
 # これとすべての島island_gとの共起度を測定

@@ -117,6 +117,7 @@ cat t[1234][uv] >11.txt
 
 
 # 再作業
+# 結局、いみなかった
 # cat "2013-01-18 "*>01.txt
 # cat "2013-01-19 "*>02.txt
 # cat "2013-01-20 "*>03.txt
@@ -164,15 +165,7 @@ data8<-readLines(textdata8)
 data9<-readLines(textdata9)
 data10<-readLines(textdata10)
 
-# ちょこっと
-# out1<-c(data2,data3)
-# out2<-c(data1,data3)
-# out3<-c(data1,data2)
-# outall<-c(data1,data2,data3)
-# write.table(out1,"output1a.txt",append=F, quote=F, col.names=F,row.names=F)
-# write.table(out2,"output2a.txt",append=F, quote=F, col.names=F,row.names=F)
-# write.table(out3,"output3a.txt",append=F, quote=F, col.names=F,row.names=F)
-# write.table(outall,"outputalla.txt",append=F, quote=F, col.names=F,row.names=F)
+
 
 # CV用 k=10
 out1<-c(data2,data3,data4,data5,data6,data7,data8,data9,data10)
@@ -337,7 +330,7 @@ setdiff(uni01,uniall)
 # 時間でどれだけキーワードがちがうか
 
 
-################################################################# ちょこっと
+################################################################# ちょこっとやってみる用
 source("/Users/senyoltw/dev/R_keygraph/R_keygraph_test.R")
 # ちょこっと
 KALL<-keygraph("outputalla.txt",50,50,50,50,5)
@@ -377,8 +370,12 @@ uni_data<-data.frame(name=uni_count,num=round(uni_num/3,1),stringsAsFactors=FALS
 
 keygraphplot(KALL)
 keygraphplot_kai(KALL,uni_data)
+### ここまで
+
+
 
 ##実験
+# 消したり
 source("/Users/senyoltw/dev/R_keygraph/R_keygraph_test.R")
 keygraph_a<-KALL[[1]]
 Key_w_G_hub_a<-KALL[[5]]
@@ -405,12 +402,8 @@ uni_data_a[uni_data_a$num==1.0,]$num<-1
 
 keygraphplot_kaikai(keygraph_a,Key_w_G_hub_a,Key_w_I_a,uni_data_a)
 
-###########論文メモ
 
 
-> par(family="HiraKakuPro-W3")
-> word_probability<-uni_data$num
-> hist(word_probability,xlab="出現率")
 
 
 ###########紙芝居KeyGraph解析ここから
