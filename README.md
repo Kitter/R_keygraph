@@ -1,5 +1,7 @@
 # 備忘録
 * R_keygraph_stable.Rは安定版。これをつかうべし
+* https://github.com/senyoltw/R_keygraph/archive/master.zip
+* ファイル一括ダウンロード
 * アルゴリズムも見なおしたほうが。初期論文の説明と最新の本での説明、微妙に違う。多分橋の抽出とKey(w)のとこ。そこらへん改良した？
 * 開発版ってブランチすれば良いのだけれどなー。
 * はてブの辞書同梱
