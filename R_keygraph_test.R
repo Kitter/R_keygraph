@@ -218,7 +218,7 @@ keygraph<-function(textdata="output.txt",M1=20,M2=20,M3=10,M4=10,M5=5) {
 text <-  RMeCabFreq(textdata)
 # 読み込み、解析。頻度表を作成。
 text_temp <- text[text$Info1 =="名詞" & text$Info2 == "一般" |text$Info1 =="動詞" & text$Info2 == "自立" |text$Info1 =="形容詞" & text$Info2 == "自立",]
-# 抽出できた。抽出条件もひとまず。これで。
+# 抽出できた。抽出条件もひとまず。これで。キーワードの分散ってどうなんだろ	
 text_temp <- text_temp[
 	text_temp$Term!="する"
 	&text_temp$Term!="いる"

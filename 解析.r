@@ -4,6 +4,8 @@
 # キーワードの安定性、アナロジー、KeyGraphを使う理由
 # KeyGraphは頻度の低いキーワードも抽出する。しかし、それは信頼性がない？
 # 喘息がひどい
+# KeyGraphのプログラムの方も少し修正。バグじゃないけど、コメント増やしたりプログラムのだめな部分なおしたり。
+# メールが怖い。就職活動終わってから豆腐メンタル。
 # 解析用
 
 # 端末で
@@ -325,6 +327,7 @@ uni_data_merge<-merge(uni_data_merge,uni_data_08,all=T)
 uni_data_merge<-merge(uni_data_merge,uni_data_09,all=T)
 uni_data_merge<-merge(uni_data_merge,uni_data_10,all=T)
 # キーワードのばらつき。どうにか。これをグラフでみようとしたけど、うまくみれない。
+# 表で。いろいろプログラム書きなおした。
 # 吐血した。まずい。
 
 
