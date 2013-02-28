@@ -1,14 +1,12 @@
-# 一番変化が大きいところが話題の転回点。
-# じゃあ、わかったとして、それをどうプロットするか。
-# 案1最初の案。変化点の大きい所で島を作るー>これにより、変換点の小さな島を見ることが出来る。そのあと、すべてから橋をだす。これにより、単語からの話題の発展を全体から見れる。
-# テキストコマンド
+# 今考えると,安定性の無いキーワードって10回中9回出てきて,ある部分を抜いた時,ごっそり消えちゃうキーワードなんじゃないかなぁ・・・
+# と	ソースにこっそり書いておく.だから,それを見つけて,見えないようにすれば,クリスマスとか消えるんじゃ.あと,KeyGraphのアルゴリズム,一番古い論文と一番新しい教科書で違うってなんだろなぁ.一番古いのでやったけど,一番新しいで書きなおすべきかも.でも安定性のアルゴリズム的には変化ないのでこのままいく.
 
-find dev/twitter/ | grep -E "dev/twitter//2012-12-26.0[0-4]|dev/twitter//2012-12-25.0[5-9]|dev/twitter//2012-12-25.1[0-9]|dev/twitter//2012-12-25.2[0-3]" | xargs -0 mv temp/
-find | grep -E "2012-12-25.0[0-4]|2012-12-25.0[5-9]|2012-12-25.1[0-9]|2012-12-25.2[0-3]" | xargs cat > test.txt
+# キーワードの分散ってそれぞれから抽出して差分、統計、グラフ化？
+# キーワードの安定性、アナロジー、KeyGraphを使う理由
+# KeyGraphは頻度の低いキーワードも抽出する。しかし、それは信頼性がない？
+# 解析用
 
-find dev/twitter/ | grep -h -E "dev/twitter//2012-12-25.0[0-4]|dev/twitter//2012-12-25.0[5-9]|dev/twitter//2012-12-25.1[0-9]|dev/twitter//2012-12-25.2[0-3]" > test.txt
-
-
+# 端末で
 cat "2012-12-21 "0[5-9]*>t1a
 cat "2012-12-21 "1[0-9]*>t2a
 cat "2012-12-21 "2[0-3]*>t3a
@@ -113,19 +111,35 @@ cat t[1234][op] >08.txt
 cat t[1234][qr] >09.txt
 cat t[1234][st] >10.txt
 cat t[1234][uv] >11.txt
+# ここまで
 
-twitter2txt("02.txt","t01.txt")
-twitter2txt("03.txt","t02.txt")
-twitter2txt("04.txt","t03.txt")
-twitter2txt("05.txt","t04.txt")
-twitter2txt("06.txt","t05.txt")
-twitter2txt("07.txt","t06.txt")
-twitter2txt("08.txt","t07.txt")
-twitter2txt("09.txt","t08.txt")
-twitter2txt("10.txt","t09.txt")
-twitter2txt("11.txt","t10.txt")
 
-Keygraph_split_analyze<-function(t01,t02,t03,t04,t05,t06,t07,t08,t09,t10){
+# 再作業
+# cat "2013-01-18 "*>01.txt
+# cat "2013-01-19 "*>02.txt
+# cat "2013-01-20 "*>03.txt
+# cat "2013-01-21 "*>04.txt
+# cat "2013-01-22 "*>05.txt
+# cat "2013-01-23 "*>06.txt
+# cat "2013-01-24 "*>07.txt
+# cat "2013-01-25 "*>08.txt
+# cat "2013-01-28 "*>09.txt
+# cat "2013-01-29 "*>10.txt
+
+
+#ここからR
+source("/Users/senyoltw/dev/R_keygraph/R_keygraph_test.R")
+twitter2txt("01.txt","t01.txt")
+twitter2txt("02.txt","t02.txt")
+twitter2txt("03.txt","t03.txt")
+twitter2txt("04.txt","t04.txt")
+twitter2txt("05.txt","t05.txt")
+twitter2txt("06.txt","t06.txt")
+twitter2txt("07.txt","t07.txt")
+twitter2txt("08.txt","t08.txt")
+twitter2txt("09.txt","t09.txt")
+twitter2txt("10.txt","t10.txt")
+
 textdata1<-"t01.txt"
 textdata2<-"t02.txt"
 textdata3<-"t03.txt"
@@ -148,6 +162,17 @@ data8<-readLines(textdata8)
 data9<-readLines(textdata9)
 data10<-readLines(textdata10)
 
+# ちょこっと
+# out1<-c(data2,data3)
+# out2<-c(data1,data3)
+# out3<-c(data1,data2)
+# outall<-c(data1,data2,data3)
+# write.table(out1,"output1a.txt",append=F, quote=F, col.names=F,row.names=F)
+# write.table(out2,"output2a.txt",append=F, quote=F, col.names=F,row.names=F)
+# write.table(out3,"output3a.txt",append=F, quote=F, col.names=F,row.names=F)
+# write.table(outall,"outputalla.txt",append=F, quote=F, col.names=F,row.names=F)
+
+# CV用 k=10
 out1<-c(data2,data3,data4,data5,data6,data7,data8,data9,data10)
 out2<-c(data1,data3,data4,data5,data6,data7,data8,data9,data10)
 out3<-c(data1,data2,data4,data5,data6,data7,data8,data9,data10)
@@ -171,39 +196,26 @@ write.table(out8,"output8.txt",append=F, quote=F, col.names=F,row.names=F)
 write.table(out9,"output9.txt",append=F, quote=F, col.names=F,row.names=F)
 write.table(out10,"output10.txt",append=F, quote=F, col.names=F,row.names=F)
 write.table(outall,"outputall.txt",append=F, quote=F, col.names=F,row.names=F)
-
-}
-
+###ここまでの処理は1回でいい。
 
 
-source("/Users/senyoltw/dev/R_keygraph/R_keygraph_test.R")
-twitter2txt("tt201301.txt","out01.txt")
-twitter2txt("tt2013-01-02.txt","out0102.txt")
-twitter2txt("tt2013-01-03.txt","out0103.txt")
-twitter2txt("tt2013-01-04.txt","out0104.txt")
-twitter2txt("tt2013-01-05.txt","out0105.txt")
-twitter2txt("tt2013-01-06.txt","out0106.txt")
-twitter2txt("tt2013-01-07.txt","out0107.txt")
-twitter2txt("tt2013-01-08.txt","out0108.txt")
-twitter2txt("tt2013-01-09.txt","out0109.txt")
-# Twitterを読み込める形式に初回だけこれが必要。
 
 
 source("/Users/senyoltw/dev/R_keygraph/R_keygraph_test.R")
 
-
-KALL<-keygraph("outputall.txt",50,50,25,25,10)
-K01<-keygraph("output1.txt",50,50,25,25,10)
-K02<-keygraph("output2.txt",50,50,25,25,10)
-K03<-keygraph("output3.txt",50,50,25,25,10)
-K04<-keygraph("output4.txt",50,50,25,25,10)
-K05<-keygraph("output5.txt",50,50,25,25,10)
-K06<-keygraph("output6.txt",50,50,25,25,10)
-K07<-keygraph("output7.txt",50,50,25,25,10)
-K08<-keygraph("output8.txt",50,50,25,25,10)
-K09<-keygraph("output9.txt",50,50,25,25,10)
-K10<-keygraph("output10.txt",50,50,25,25,10)
+KALL<-keygraph("outputall.txt",50,50,50,50,10)
+K01<-keygraph("output1.txt",50,50,50,50,10)
+K02<-keygraph("output2.txt",50,50,50,50,10)
+K03<-keygraph("output3.txt",50,50,50,50,10)
+K04<-keygraph("output4.txt",50,50,50,50,10)
+K05<-keygraph("output5.txt",50,50,50,50,10)
+K06<-keygraph("output6.txt",50,50,50,50,10)
+K07<-keygraph("output7.txt",50,50,50,50,10)
+K08<-keygraph("output8.txt",50,50,50,50,10)
+K09<-keygraph("output9.txt",50,50,50,50,10)
+K10<-keygraph("output10.txt",50,50,50,50,10)
 # KeyGraph解析
+# 交叉検証法・・・キーワードの分散・・・
 
 keygraphall<-KALL[[7]]
 keygraph01<-K01[[7]]
@@ -239,6 +251,8 @@ out7<-as.data.frame(rk7)
 out8<-as.data.frame(rk8)
 out9<-as.data.frame(rk9)
 out10<-as.data.frame(rk10)
+
+
 graph<-rbind(out1,out2,out3,out4,out5,out6,out7,out8,out9,out10)
 rownames(graph)<-c("out1","out2","out3","out4","out5","out6","out7","out8","out9","out10")
 cor(graph[1],graph[2])
@@ -246,42 +260,207 @@ colnames(graph)<-c("Huffman","correlation ")
 plot(graph)
 
 
-# keyI01<-K01[[6]]
-# keyI0102<-K0102[[6]]
-# keyI0103<-K0103[[6]]
-# keyI0104<-K0104[[6]]
-# keyI0105<-K0105[[6]]
-# keyI0106<-K0106[[6]]
-# keyI0107<-K0107[[6]]
-# keyI0108<-K0108[[6]]
-# keyI0109<-K0109[[6]]
-# # Keyアイテム10個
+uniall<-union(KALL[[1]]$Term0,KALL[[1]]$Term)
 
-# s02<-match(keyI0102$word,keyI01$word)
-# s03<-match(keyI0103$word,keyI01$word)
-# s04<-match(keyI0104$word,keyI01$word)
-# s05<-match(keyI0105$word,keyI01$word)
-# s06<-match(keyI0106$word,keyI01$word)
-# s07<-match(keyI0107$word,keyI01$word)
-# s08<-match(keyI0108$word,keyI01$word)
-# s09<-match(keyI0109$word,keyI01$word)
+uni01<-union(K01[[1]]$Term0,K01[[1]]$Term)
+uni02<-union(K02[[1]]$Term0,K02[[1]]$Term)
+uni03<-union(K03[[1]]$Term0,K03[[1]]$Term)
+uni04<-union(K04[[1]]$Term0,K04[[1]]$Term)
+uni05<-union(K05[[1]]$Term0,K05[[1]]$Term)
+uni06<-union(K06[[1]]$Term0,K06[[1]]$Term)
+uni07<-union(K07[[1]]$Term0,K07[[1]]$Term)
+uni08<-union(K08[[1]]$Term0,K08[[1]]$Term)
+uni09<-union(K09[[1]]$Term0,K09[[1]]$Term)
+uni10<-union(K10[[1]]$Term0,K10[[1]]$Term)
 
-# s02<-s02[!is.na(s02)]
-# s03<-s03[!is.na(s03)]
-# s04<-s04[!is.na(s04)]
-# s05<-s05[!is.na(s05)]
-# s06<-s06[!is.na(s06)]
-# s07<-s07[!is.na(s07)]
-# s08<-s08[!is.na(s08)]
-# s09<-s09[!is.na(s09)]
-# # Keyアイテムを書けてないkeyI01と比較し、類似があるか抽出、NAと除く
+uni<-c(uni01,uni02,uni03,uni04,uni05,uni06,uni07,uni08,uni09,uni10)
+uni_count<-unique(uni)
+uni_num<-numeric(length(uni_count))
+for (n in 1:length(uni_count)) { 
+	uni_num[n]<-sum(uni_count[n]==uni)
+}
+uni_data<-data.frame(name=uni_count,num=uni_num/10,stringsAsFactors=FALSE)
+keygraphplot_kai(KALL,uni_data)
 
-# s02
-# s03
-# s04
-# s05
-# s06
-# s07
-# s08
-# s09
 
+# 差分比較
+uni01_diff<-setdiff(union(K01[[1]]$Term0,K01[[1]]$Term),uniall)
+uni02_diff<-setdiff(union(K02[[1]]$Term0,K02[[1]]$Term),uniall)
+uni03_diff<-setdiff(union(K03[[1]]$Term0,K03[[1]]$Term),uniall)
+uni04_diff<-setdiff(union(K04[[1]]$Term0,K04[[1]]$Term),uniall)
+uni05_diff<-setdiff(union(K05[[1]]$Term0,K05[[1]]$Term),uniall)
+uni06_diff<-setdiff(union(K06[[1]]$Term0,K06[[1]]$Term),uniall)
+uni07_diff<-setdiff(union(K07[[1]]$Term0,K07[[1]]$Term),uniall)
+uni08_diff<-setdiff(union(K08[[1]]$Term0,K08[[1]]$Term),uniall)
+uni09_diff<-setdiff(union(K09[[1]]$Term0,K09[[1]]$Term),uniall)
+uni10_diff<-setdiff(union(K10[[1]]$Term0,K10[[1]]$Term),uniall)
+
+uni_diff<-c(uni01_diff,uni02_diff,uni03_diff,uni04_diff,uni05_diff,uni06_diff,uni07_diff,uni08_diff,uni09_diff,uni10_diff)
+uni_count_diff<-unique(uni_diff)
+uni_num_diff<-numeric(length(uni_count_diff))
+for (n in 1:length(uni_count_diff)) { 
+	uni_num_diff[n]<-sum(uni_count_diff[n]==uni_diff)
+}
+uni_data_diff<-data.frame(name=uni_count_diff,num=uni_num_diff/10,stringsAsFactors=FALSE)
+
+
+uni_data_01<-data.frame(name=uni01_diff,day01=1,stringsAsFactors=FALSE)
+uni_data_02<-data.frame(name=uni02_diff,day02=1,stringsAsFactors=FALSE)
+uni_data_03<-data.frame(name=uni03_diff,day03=1,stringsAsFactors=FALSE)
+uni_data_04<-data.frame(name=uni04_diff,day04=1,stringsAsFactors=FALSE)
+uni_data_05<-data.frame(name=uni05_diff,day05=1,stringsAsFactors=FALSE)
+uni_data_06<-data.frame(name=uni06_diff,day06=1,stringsAsFactors=FALSE)
+uni_data_07<-data.frame(name=uni07_diff,day07=1,stringsAsFactors=FALSE)
+uni_data_08<-data.frame(name=uni08_diff,day08=1,stringsAsFactors=FALSE)
+uni_data_09<-data.frame(name=uni09_diff,day09=1,stringsAsFactors=FALSE)
+uni_data_10<-data.frame(name=uni10_diff,day10=1,stringsAsFactors=FALSE)
+
+uni_data_merge<-merge(uni_data_01,uni_data_02,all=T)
+uni_data_merge<-merge(uni_data_merge,uni_data_03,all=T)
+uni_data_merge<-merge(uni_data_merge,uni_data_04,all=T)
+uni_data_merge<-merge(uni_data_merge,uni_data_05,all=T)
+uni_data_merge<-merge(uni_data_merge,uni_data_06,all=T)
+uni_data_merge<-merge(uni_data_merge,uni_data_07,all=T)
+uni_data_merge<-merge(uni_data_merge,uni_data_08,all=T)
+uni_data_merge<-merge(uni_data_merge,uni_data_09,all=T)
+uni_data_merge<-merge(uni_data_merge,uni_data_10,all=T)
+
+
+
+setdiff(uni01,uni02)
+setdiff(uni01,uniall)
+# 差分比較
+# 時間でどれだけキーワードがちがうか
+
+
+################################################################# ちょこっと
+source("/Users/senyoltw/dev/R_keygraph/R_keygraph_test.R")
+# ちょこっと
+KALL<-keygraph("outputalla.txt",50,50,50,50,5)
+K01<-keygraph("output1a.txt",50,50,50,50,5)
+K02<-keygraph("output2a.txt",50,50,50,50,5)
+K03<-keygraph("output3a.txt",50,50,50,50,5)
+
+keygraphall<-KALL[[7]]
+keygraph01<-K01[[7]]
+keygraph02<-K02[[7]]
+keygraph03<-K03[[7]]
+
+rk1<-rating_g(keygraph01,keygraphall)
+rk2<-rating_g(keygraph02,keygraphall)
+rk3<-rating_g(keygraph03,keygraphall)
+
+out1<-as.data.frame(rk1)
+out2<-as.data.frame(rk2)
+out3<-as.data.frame(rk3)
+
+graph<-rbind(out1,out2,out3)
+rownames(graph)<-c("out1","out2","out3")
+cor(graph[1],graph[2])
+colnames(graph)<-c("Huffman","correlation ")
+plot(graph)
+
+uni01<-union(K01[[1]]$Term0,K01[[1]]$Term)
+uni02<-union(K02[[1]]$Term0,K02[[1]]$Term)
+uni03<-union(K03[[1]]$Term0,K03[[1]]$Term)
+uni<-c(uni01,uni02,uni03)
+uni_count<-unique(uni)
+uni_num<-numeric(length(uni_count))
+for (n in 1:length(uni_count)) { 
+	uni_num[n]<-sum(uni_count[n]==uni)
+}
+uni_data<-data.frame(name=uni_count,num=round(uni_num/3,1),stringsAsFactors=FALSE)
+
+keygraphplot(KALL)
+keygraphplot_kai(KALL,uni_data)
+
+##実験
+source("/Users/senyoltw/dev/R_keygraph/R_keygraph_test.R")
+keygraph_a<-KALL[[1]]
+Key_w_G_hub_a<-KALL[[5]]
+Key_w_I_a<-KALL[[6]]
+uni_data_a<-uni_data
+uni_data_b<-uni_data
+
+uni_data_a[uni_data_a$num<0.5,]$num<-0
+
+for(n in 1:length(uni_data_a[uni_data_a$num==0,]$name)){
+	keygraph_a <- keygraph_a[keygraph_a$Term0 != uni_data_a[uni_data_a$num==0,]$name[n],]
+	keygraph_a <- keygraph_a[keygraph_a$Term != uni_data_a[uni_data_a$num==0,]$name[n],]
+	Key_w_G_hub_a <- Key_w_G_hub_a[Key_w_G_hub_a$word != uni_data_a[uni_data_a$num==0,]$name[n],]
+	Key_w_I_a <- Key_w_I_a[Key_w_I_a$word != uni_data_a[uni_data_a$num==0,]$name[n],]
+
+}
+
+uni_data_a[uni_data_a$num==0.5,]$num<-0.1
+uni_data_a[uni_data_a$num==0.6,]$num<-0.2
+uni_data_a[uni_data_a$num==0.7,]$num<-0.4
+uni_data_a[uni_data_a$num==0.8,]$num<-0.6
+uni_data_a[uni_data_a$num==0.9,]$num<-0.8
+uni_data_a[uni_data_a$num==1.0,]$num<-1
+
+keygraphplot_kaikai(keygraph_a,Key_w_G_hub_a,Key_w_I_a,uni_data_a)
+
+###########論文メモ
+
+
+> par(family="HiraKakuPro-W3")
+> word_probability<-uni_data$num
+> hist(word_probability,xlab="出現率")
+
+
+###########紙芝居KeyGraph解析ここから
+
+source("/Users/senyoltw/dev/R_keygraph/R_keygraph_test.R")
+day1<-keygraph("t01.txt",10,10,10,10,3)
+day2<-keygraph("t02.txt",10,10,10,10,3)
+day3<-keygraph("t03.txt",10,10,10,10,3)
+# day4<-keygraph("t04.txt",20,20,20,20,5)
+# day5<-keygraph("t05.txt",20,20,20,20,5)
+# day6<-keygraph("t06.txt",20,20,20,20,5)
+# day7<-keygraph("t07.txt",20,20,20,20,5)
+# day8<-keygraph("t08.txt",20,20,20,20,5)
+# day9<-keygraph("t09.txt",20,20,20,20,5)
+# viewday<-keygraph("t10.txt",20,20,20,20,5)
+
+day<-tougou_kami(day2[[1]],day1[[1]])
+day<-tougou_kami(day3[[1]],day)
+# day<-tougou_kami(day4[[1]],day)
+# day<-tougou_kami(day5[[1]],day)
+# day<-tougou_kami(day6[[1]],day)
+# day<-tougou_kami(day7[[1]],day)
+# day<-tougou_kami(day8[[1]],day)
+# day<-tougou_kami(day9[[1]],day)
+# day<-tougou_kami(viewday[[1]],day)
+
+# 1日から10にちまでを統合。
+
+g <-graph.data.frame(day, directed = F)
+
+g<-loop_kami(g,day1,0.1)
+g<-loop_kami(g,day2,0.4)
+g<-loop_kami(g,day3,1.0)
+# g<-loop_kami(g,day4,0.4)
+# g<-loop_kami(g,day5,0.5)
+# g<-loop_kami(g,day6,0.6)
+# g<-loop_kami(g,day7,0.7)
+# g<-loop_kami(g,day8,0.8)
+# g<-loop_kami(g,day9,0.9)
+# g<-loop_kami(g,viewday,1)
+# 透過度を設定
+
+# グラフプロット関数
+E(g)[Span == 3]$width <- 2
+# 線の幅
+E(g)$lty <- 1
+# 実線
+E(g)[Span == 3]$lty <- 3
+# 点線
+V(g)$size <- 5
+V(g)$label.cex <- 0.7
+V(g)$label.dist <- 0.5
+V(g)$label.degree <- pi/2
+V(g)$label.color <- "black"
+# 色
+plot(g,layout=layout.kamada.kawai ,vertex.label=V(g)$name)
+# kamada.kawaiでいいよね。力学もでるだし。

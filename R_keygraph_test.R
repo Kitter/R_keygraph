@@ -35,7 +35,129 @@ names(x)<-name
 return(x)
 }
 
-keygraphplot<-function(keygraph,Key_w_G_hub,Key_w_I){
+
+keygraphplot_kai<-function(KG,uni_data){
+
+keygraph<-KG[[1]]
+Key_w_G_hub<-KG[[5]]
+Key_w_I<-KG[[6]]
+# グラフプロット関数
+g <-graph.data.frame(keygraph, directed = F)
+# E(g)$color <- "black"
+E(g)[Span == 3]$width <- 2
+# 線の幅
+E(g)$lty <- 1
+# 実線
+E(g)[Span == 3]$lty <- 3
+# E(g)[Span == 3]$color <- "red"
+# 点線
+V(g)$size <- 5
+V(g)$label.cex <- 0.7
+V(g)$label.color <- "black"
+V(g)$label.dist <- 0.5
+V(g)$label.degree <- pi/2
+for(n in 1:length(uni_data$num)){
+	V(g)[name == uni_data$name[n]]$color <- rgb(0, 0, 1, alpha=uni_data$num[n])
+	V(g)[name == uni_data$name[n]]$frame.color <- rgb(0, 0, 0, alpha=uni_data$num[n])
+}
+for(n in 1:length(Key_w_G_hub$word)){
+	V(g)[name == Key_w_G_hub$word[n]]$color <- rgb(0, 0, 0, alpha=uni_data$num[uni_data$name==Key_w_G_hub$word[n]])
+}
+for(n in 1:length(Key_w_I$word)){
+	V(g)[name == Key_w_I$word[n]]$color <- rgb(1, 0, 0, alpha=uni_data$num[uni_data$name==Key_w_I$word[n]])
+}
+for(n in 1:length(uni_data$num)){
+	V(g)[name == uni_data$name[n]]$name <- paste(uni_data$name[[n]],uni_data$num[[n]])
+}
+# 色
+plot(g,layout=layout.kamada.kawai ,vertex.label=V(g)$name)
+# kamada.kawaiでいいよね。力学もでるだし。
+}
+
+keygraphplot_kaikai<-function(keygraph,Key_w_G_hub,Key_w_I,uni_data){
+#aa<-round(10/length(unique(uni_data$num)),1)
+# グラフプロット関数
+g <-graph.data.frame(keygraph, directed = F)
+# E(g)$color <- "black"
+E(g)[Span == 3]$width <- 2
+# 線の幅
+E(g)$lty <- 1
+# 実線
+E(g)[Span == 3]$lty <- 3
+# E(g)[Span == 3]$color <- "red"
+# 点線
+V(g)$size <- 5
+V(g)$label.cex <- 0.7
+V(g)$label.color <- "black"
+V(g)$label.dist <- 0.5
+V(g)$label.degree <- pi/2
+for(n in 1:length(uni_data$num)){
+	V(g)[name == uni_data$name[n]]$color <- rgb(0, 0, 1, alpha=uni_data$num[n])
+	V(g)[name == uni_data$name[n]]$frame.color <- rgb(0, 0, 0, alpha=uni_data$num[n])
+}
+for(n in 1:length(Key_w_G_hub$word)){
+	V(g)[name == Key_w_G_hub$word[n]]$color <- rgb(0, 0, 0, alpha=uni_data$num[uni_data$name==Key_w_G_hub$word[n]])
+}
+for(n in 1:length(Key_w_I$word)){
+	V(g)[name == Key_w_I$word[n]]$color <- rgb(1, 0, 0, alpha=uni_data$num[uni_data$name==Key_w_I$word[n]])
+}
+# for(n in 1:length(uni_data$num)){
+# 	V(g)[name == uni_data$name[n]]$name <- paste(uni_data$name[[n]],uni_data$num[[n]])
+# }
+# 色
+plot(g,layout=layout.kamada.kawai ,vertex.label=V(g)$name)
+# kamada.kawaiでいいよね。力学もでるだし。
+}
+
+tougou_kami<-function(yuusen,haijo){
+# 紙芝居用
+# 行列Aと行列Bの統合。もう片方との重複を削除。さいごに統合。
+for (n in 1:length(yuusen$Span)) { 
+	haijo <- haijo[haijo$Term0 != yuusen[[1]][n]|haijo$Term != yuusen[[2]][n],]
+	haijo <- haijo[haijo$Term != yuusen[[1]][n]|haijo$Term0 != yuusen[[2]][n],]
+}
+
+tougou <- merge(haijo,yuusen,all=T)
+return(tougou)
+}
+
+loop_kami<-function(day,keygraph,touka){
+# 紙芝居用
+g<-day
+# グラフ
+KG<-keygraph
+# KeyGraphデータ
+
+keygraph<-KG[[1]]
+Key_w_G_hub<-KG[[5]]
+Key_w_I<-KG[[6]]
+word<-union(KG[[1]]$Term0,KG[[1]]$Term)
+
+# for(n in 1:length(day1[[1]]$Term0)){
+# 	E(g)[Span == touka]$color <- rgb(0, 0, 0, alpha=touka)
+# }
+for(n in 1:length(word)){
+	V(g)[name == word[n]]$color <- rgb(0, 0, 1, alpha=touka)
+}
+for(n in 1:length(Key_w_G_hub$word)){
+	V(g)[name == Key_w_G_hub$word[n]]$color <- rgb(0, 0, 0, alpha=touka)
+}
+for(n in 1:length(Key_w_I$word)){
+	V(g)[name == Key_w_I$word[n]]$color <- rgb(1, 0, 0, alpha=touka)
+}
+# for(n in 1:length(word)){
+# 	V(g)[name == word[n]]$label.color <- rgb(0, 0, 0, alpha=touka)
+# }
+return(g)
+}
+
+
+
+keygraphplot<-function(KG){
+
+keygraph<-KG[[1]]
+Key_w_G_hub<-KG[[5]]
+Key_w_I<-KG[[6]]
 # グラフプロット関数
 g <-graph.data.frame(keygraph, directed = F)
 # E(g)$color <- "black"
@@ -59,11 +181,11 @@ for(n in 1:length(Key_w_I$word)){
 	V(g)[name == Key_w_I$word[n]]$color <- "red"
 }
 # 色
-plot(g,layout=layout.auto ,vertex.label=V(g)$name)
+plot(g,layout=layout.kamada.kawai ,vertex.label=V(g)$name)
 }
 
 tougou<-function(yuusen,haijo){
-# 行列Aと行列Bの統合。片方を0にし、もう片方との重複を削除
+# 行列Aと行列Bの統合。片方を0にし、もう片方との重複を削除。さいごに統合。
 
 haijo$Span <- 0
 
@@ -200,10 +322,30 @@ text_temp <- text_temp[
 	&text_temp$Term!="か"
 	&text_temp$Term!="年"
 	&text_temp$Term!="姿"
+	&text_temp$Term!="日"
+	&text_temp$Term!="気"
+	&text_temp$Term!="よう"
+	&text_temp$Term!="つける"
+	&text_temp$Term!="うい"
+	&text_temp$Term!="へ"
+	&text_temp$Term!="おお"
+	&text_temp$Term!="分"
+	&text_temp$Term!="よい"
+	&text_temp$Term!="ちゃう"
+	&text_temp$Term!="今日"
+	&text_temp$Term!="明日"
+	&text_temp$Term!="ta"
+	&text_temp$Term!="in"
+	&text_temp$Term!="on"
+	&text_temp$Term!="www"
+	&text_temp$Term!="ーー"
+	&text_temp$Term!="ゆ"
+	&text_temp$Term!="女"
+	&text_temp$Term!="男"
 
 
 ,]
-# 抽出ブラックリスト。するとか、なるとか。いるとか。ひとまず。
+# 抽出ブラックリスト。するとか、なるとか。いるとか。ひとまず。メール怖い。
 
 # 共起グラフの作成
 text_freq <- subset(text_temp,text_temp$Freq>=tail(sort(text_temp$Freq),n=M1)[1])
@@ -510,7 +652,7 @@ for(n in 1:length(Key_w_I$word)){
 	V(g)[name == Key_w_I$word[n]]$color <- "red"
 }
 # 色
-plot(g,layout=layout.auto ,vertex.label=V(g)$name)
+plot(g,layout=layout.kamada.kawai ,vertex.label=V(g)$name)
 
 return(list(keygraph,KG_sima,KG_hashi,Key_w_G,Key_w_G_hub,Key_w_I,keygraph_RAW,text_freq))
 }

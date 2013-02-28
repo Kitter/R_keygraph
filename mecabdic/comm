@@ -1,0 +1,5 @@
+nkf -Ew keywordlist_furigana.csv > hatena_keywordlist.csv
+python create_dictionary.py hatena_keywordlist.csv hatena_userdic.csv
+
+/usr/local/Cellar/mecab/0.994/libexec/mecab/mecab-dict-index -d /usr/local/Cellar/mecab/0.994/lib/mecab/dic/naist-jdic/ \
+-u hatenakeyword.dic -f utf-8 -t utf-8 hatena_userdic.csv
