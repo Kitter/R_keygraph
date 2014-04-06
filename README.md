@@ -1,4 +1,4 @@
-* KeyGraph R言語での実装
+# KeyGraph R言語での実装
 
 # 備忘録
 * R_keygraph_stable.Rは安定版。これをつかうべし
